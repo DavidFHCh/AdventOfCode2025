@@ -3,12 +3,12 @@ use advent_of_code2025::fetch_input;
 #[tokio::main]
 async fn main() {
     let input = fetch_input(1).await;
-    part_one(&input).await;
+    part_one(&input);
     println!("---");
-    part_two(&input).await;
+    part_two(&input);
 }
 
-async fn part_one(input: &str) -> i32 {
+fn part_one(input: &str) -> i32 {
     let mut current = 50;
     let mut counter_over_zeroes = 0;
 
@@ -29,7 +29,7 @@ async fn part_one(input: &str) -> i32 {
     counter_over_zeroes
 }
 
-async fn part_two(input: &str) -> i32 {
+fn part_two(input: &str) -> i32 {
     let mut current: i32 = 50;
     let mut visited_zeroes = 0;
 
@@ -65,38 +65,38 @@ async fn part_two(input: &str) -> i32 {
 mod tests {
     use super::*;
 
-    #[tokio::test]
-    async fn test_l150_should_be_2() {
-        let result = part_two("L150").await;
+    #[test]
+    fn test_l150_should_be_2() {
+        let result = part_two("L150");
         assert_eq!(result, 2);
     }
 
-    #[tokio::test]
-    async fn test_r150_should_be_2() {
-        let result = part_two("R150").await;
+    #[test]
+    fn test_r150_should_be_2() {
+        let result = part_two("R150");
         assert_eq!(result, 2);
     }
 
-    #[tokio::test]
-    async fn test_r_start_at_0() {
-        let result = part_two("L50\nR100").await;
+    #[test]
+    fn test_r_start_at_0() {
+        let result = part_two("L50\nR100");
         assert_eq!(result, 2);
     }
 
-    #[tokio::test]
-    async fn test_l_start_at_0() {
-        let result = part_two("L50\nL100").await;
+    #[test]
+    fn test_l_start_at_0() {
+        let result = part_two("L50\nL100");
         assert_eq!(result, 2);
     }
 
-    #[tokio::test]
-    async fn test_100() {
-        let result = part_two("L100\nR50").await;
+    #[test]
+    fn test_100() {
+        let result = part_two("L100\nR50");
         assert_eq!(result, 2);
     }
 
-    #[tokio::test]
-    async fn test_example_part_two() {
+    #[test]
+    fn test_example_part_two() {
         let input = "L68
 L30
 R48
@@ -107,7 +107,7 @@ L1
 L99
 R14
 L82";
-        let result = part_two(input).await;
+        let result = part_two(input);
         assert_eq!(result, 6);
     }
 }
