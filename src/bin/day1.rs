@@ -40,11 +40,8 @@ async fn part_two(input: &str) -> i32 {
             value *= -1;
         }
 
-        print!("{}{} -> ", direction, value.abs());
         let previous = current;
-        print!("{} to ", current);
         current += value;
-        print!("{} ", current);
 
         let mut crossings = (current.div_euclid(100) - previous.div_euclid(100)).abs();
         if direction == 'L' {
@@ -55,7 +52,6 @@ async fn part_two(input: &str) -> i32 {
                 crossings += 1;
             }
         }
-        print!("Crossings: {} \n", crossings);
         visited_zeroes += crossings;
 
         current = current.rem_euclid(100);
