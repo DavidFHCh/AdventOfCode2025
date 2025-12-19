@@ -1,13 +1,8 @@
 use advent_of_code2025::fetch_input;
-use std::collections::BinaryHeap;
 
 #[tokio::main]
 async fn main() {
     let input = fetch_input(3).await;
-/*     let input = "987654321111111
-811111111111119
-234234234234278
-818181911112111"; */
     let mut banks: Vec<Vec<u32>> = Vec::new();
     for bank in input.lines() {
         banks.push(parse_bank(bank));
@@ -21,39 +16,54 @@ fn parse_bank(bank: &str) -> Vec<u32> {
     bank.chars().map(|c| c.to_digit(10).unwrap()).collect()
 }
 
-fn part_one(banks: &Vec<Vec<u32>>) -> u32 {
-    let mut total_jolts = 0;
-    for bank in banks {
-        let mut max_heap: BinaryHeap<u32> = BinaryHeap::from(bank.clone());
-        let max_value = max_heap.pop().unwrap();
-        let mut curreent_jolts = 0;
-        let indices = bank
-            .iter()
-            .enumerate()
-            .filter(|&(_, &value)| value == max_value)
-            .map(|(index, _)| index)
-            .collect::<Vec<usize>>();
-        if indices.len() < 2 {
-            if indices[0] == bank.len() - 1 {
-                let second_max = max_heap.pop().unwrap();
-                curreent_jolts += (second_max * 10) + max_value;
-            } else {
-                let i = indices[0] + 1;
-                let mut max_heap_rem: BinaryHeap<u32> =
-                    bank[i..].into_iter().cloned().collect();
-                let second_max = max_heap_rem.pop().unwrap();
-                curreent_jolts += (max_value * 10) + second_max;
-            }
-        } else {
-            curreent_jolts += (max_value * 10) + max_value
-        }
-        print!("{} ", curreent_jolts);
-        total_jolts += curreent_jolts;
+fn convert_slice_to_num(slice: &[u32]) -> u64 {
+    let mut num: u64 = 0;
+    for &digit in slice {
+        num = num * 10 + digit as u64;
     }
-    println!("Total jolts: {}", total_jolts);
-    total_jolts
+    num
+}
+
+fn get_max_jolts(bank: Vec<u32>, n: u32) -> u64 {
+    if n == 0 {
+        return 0;
+    }
+    let mut i = 0;
+    let mut j = n as usize;
+    let mut max_i = 0;
+    let mut current_max = 0;
+    while j <= bank.len() {
+        let slice = &bank[i..j as usize];
+        let new_max = current_max.max(convert_slice_to_num(slice));
+        if new_max > current_max  && (new_max / 10u64.pow(n - 1)) > (current_max / 10u64.pow(n - 1)){
+            current_max = new_max;
+            max_i = i;
+        }
+        i += 1;
+        j += 1;
+    }
+    let most_left_val = (current_max / 10u64.pow(n - 1)) * 10u64.pow(n - 1);
+    //println!("current_max: {}, most_left_val: {}, max_i: {}", current_max, most_left_val, max_i);
+    current_max =
+        current_max.max(most_left_val + get_max_jolts(bank[(max_i+1)..].to_vec(), n - 1));
+    println!("current_max final: {}, n: {}", current_max, n);
+    current_max
+}
+
+fn part_one(banks: &Vec<Vec<u32>>) {
+    let mut total_jolts: u64 = 0;
+    for bank in banks {
+        println!("Processing bank: {:?}", bank);
+        total_jolts += get_max_jolts(bank.clone(), 2);
+    }
+    println!("Total jolts part one: {}", total_jolts);
 }
 
 fn part_two(banks: &Vec<Vec<u32>>) {
-    println!("Part two not implemented yet.");
+    let mut total_jolts: u64 = 0;
+    for bank in banks {
+        println!("Processing bank: {:?}", bank);
+        total_jolts += get_max_jolts(bank.clone(), 12);
+    }
+    println!("Total jolts part two: {}", total_jolts);
 }
