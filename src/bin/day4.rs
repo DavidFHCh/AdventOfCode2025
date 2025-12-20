@@ -103,7 +103,7 @@ fn part_two(mut paper_rolls: Vec<Vec<char>>) -> i32 {
             "Current movable papers this round: {}",
             current_movable_papers
         );
-        //print_current_state(&paper_rolls);
+        print_current_state(&paper_rolls);
         amount_movable_papers += current_movable_papers;
         clean_up(&mut paper_rolls);
     }
