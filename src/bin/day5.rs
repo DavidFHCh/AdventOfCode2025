@@ -1,4 +1,5 @@
 use advent_of_code2025::fetch_input;
+use std::time::Instant;
 
 #[tokio::main]
 async fn main() {
@@ -7,9 +8,15 @@ async fn main() {
     let ranges = get_ranges(ranges_str);
     let ingredients = get_ingredients(ingredients_str);
 
+    let start = Instant::now();
     part_one(ranges.clone(), ingredients);
+    println!("part_one elapsed: {:?}", start.elapsed());
+
     println!("----------------");
+
+    let start = Instant::now();
     part_two(ranges.clone());
+    println!("part_two elapsed: {:?}", start.elapsed());
 }
 
 fn get_ranges(range_str: &str) -> Vec<(u64, u64)> {
