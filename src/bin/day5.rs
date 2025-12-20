@@ -3,17 +3,6 @@ use advent_of_code2025::fetch_input;
 #[tokio::main]
 async fn main() {
     let input = fetch_input(5).await;
-    /*     let input = "3-5
-    10-14
-    16-20
-    12-18
-
-    1
-    5
-    8
-    11
-    17
-    32"; */
     let (ranges_str, ingredients_str) = input.split_once("\n\n").unwrap();
     let ranges = get_ranges(ranges_str);
     let ingredients = get_ingredients(ingredients_str);
